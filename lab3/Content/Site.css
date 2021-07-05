@@ -4,7 +4,7 @@
 }
 .navbar-inverse {
     background-color: #0028efd9;
-    border-color: aliceblue;
+    border-color: yellow;
 }
 /* Set padding to keep content from hitting the edges */
 .body-content {
@@ -28,5 +28,26 @@ textarea {
 .btn-primary {
     color: #fff;
     background-color: #b73333;
-    border-color: #0a0a0a;
+    border-color: yellow;
+}
+
+.course {
+    list-style: none;
+}
+.course >li {
+    position :relative;
+    margin-bottom:30px;
+}
+.course >li .date {
+    text-align:center;
+    background-color: blue;
+    color:yellow;
+    width: 60px;
+    border-radius: 8px;
+}
+.course >li .details{
+    position:absolute;
+    top:0;
+    left: 70px;
+    color: yellow;
 }
