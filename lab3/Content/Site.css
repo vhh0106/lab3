@@ -28,7 +28,7 @@ textarea {
 .btn-primary {
     color: #fff;
     background-color: #b73333;
-    border-color: yellow;
+    border-color: red;
 }
 
 .course {
@@ -41,7 +41,7 @@ textarea {
 .course >li .date {
     text-align:center;
     background-color: blue;
-    color:yellow;
+    color:red;
     width: 60px;
     border-radius: 8px;
 }
@@ -49,5 +49,14 @@ textarea {
     position:absolute;
     top:0;
     left: 70px;
-    color: yellow;
+    color: red;
+}
+
+.course > li .action {
+    display :none;
+    left:70px;
+    position: absolute;
+}
+.course >li:hover .action{
+    display: block;
 }
