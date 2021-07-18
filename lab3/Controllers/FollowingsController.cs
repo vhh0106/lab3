@@ -21,18 +21,21 @@ namespace lab3.Controllers
         public IHttpActionResult Follow(FollowingDto followingDto)
         {
             var userId = User.Identity.GetUserId();
-            if (_dbContext.Followings.Any(f => f.FolloweeId == userId && f.FolloweeId == followingDto.FolloweeId))
-                return BadRequest("Following already exists!");
             var following = new Following
             {
                 FollowerId = userId,
                 FolloweeId = followingDto.FolloweeId
             };
+            if (_dbContext.Followings.Any(f => f.FollowerId == userId && f.FolloweeId == followingDto.FolloweeId))
+            {
+                _dbContext.Entry(following).State = System.Data.Entity.EntityState.Deleted;
+                _dbContext.SaveChanges();
+                return Json(new { isFollow = false, followeeId = followingDto.FolloweeId });
+            }
+
             _dbContext.Followings.Add(following);
             _dbContext.SaveChanges();
-
-            return Ok();
-
+            return Json(new { isFollow = true, followeeId = followingDto.FolloweeId });
         }
     }
 }

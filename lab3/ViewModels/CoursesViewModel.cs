@@ -12,6 +12,7 @@ namespace lab3.ViewModels
     
         public IEnumerable<Course> UpcommingCourses { get; set; }
         public bool ShowAction { get; set; }
-    
+        public IQueryable<Attendance> IsFollowCourses { get; internal set; }
+        public IQueryable<Following> IsFollowLecturers { get; internal set; }
     }
 }

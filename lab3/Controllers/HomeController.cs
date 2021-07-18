@@ -6,8 +6,7 @@ using System.Web;
 using System.Web.Mvc;
 using System.Data.Entity;
 using lab3.ViewModels;
-
-
+using Microsoft.AspNet.Identity;
 
 namespace lab3.Controllers
 {
@@ -20,19 +19,28 @@ namespace lab3.Controllers
         }
         public ActionResult Index()
         {
-            var upcommingCourses = _dbContext.Courses
+            var userId = User.Identity.GetUserId();
+            var upcomingCourses = _dbContext.Courses
                 .Include(c => c.Lecturer)
                 .Include(c => c.Category)
-                .Where(c => c.DateTime > DateTime.Now);
-            
-
-            var viewModel = new CoursesViewModel
+                .Where(c => c.DateTime > DateTime.Now && c.IsCanceled == false).ToList();
+            var isFollowCourses = _dbContext.Attendances
+                .Where(a => a.AttendeeId == userId)
+                .Include(c => c.Course);
+            var isFollowLecturers = _dbContext.Followings
+                .Where(a => a.FollowerId == userId)
+                .Include(c => c.Followee);
+            var viewModel = new CoursesViewModel()
             {
-                UpcommingCourses = upcommingCourses,
-                ShowAction = User.Identity.IsAuthenticated
+                UpcommingCourses = upcomingCourses,
+                ShowAction = User.Identity.IsAuthenticated,
+                IsFollowCourses = isFollowCourses,
+                IsFollowLecturers = isFollowLecturers,
+
             };
             return View(viewModel);
         }
+
         public ActionResult About()
         {
             ViewBag.Message = "Your application description page.";
@@ -46,6 +54,5 @@ namespace lab3.Controllers
 
             return View();
         }
-        
     }
 }

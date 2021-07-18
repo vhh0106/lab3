@@ -53,16 +53,24 @@ namespace lab3.Controllers
         public ActionResult Attending()
         {
             var userId = User.Identity.GetUserId();
-            var course = _dbContext.Attendances
+            var courses = _dbContext.Attendances
                 .Where(a => a.AttendeeId == userId)
                 .Select(a => a.Course)
                 .Include(l => l.Lecturer)
                 .Include(l => l.Category)
                 .ToList();
+            var isFollowCourses = _dbContext.Attendances
+              .Where(a => a.AttendeeId == userId)
+              .Include(c => c.Course);
+            var isFollowLecturers = _dbContext.Followings
+                .Where(a => a.FollowerId == userId)
+                .Include(c => c.Followee);
             var viewModel = new CoursesViewModel
             {
-                UpcommingCourses = course,
-                ShowAction = User.Identity.IsAuthenticated
+                UpcommingCourses = courses,
+                ShowAction = User.Identity.IsAuthenticated,
+                IsFollowCourses = isFollowCourses,
+                IsFollowLecturers = isFollowLecturers,
             };
             return View(viewModel);
         }
@@ -118,12 +126,12 @@ namespace lab3.Controllers
             var course = _dbContext.Courses.Single(c => c.Id == viewModel.Id && c.LecturerId == userId);
             
 
-            {
+            
                 course.Place = viewModel.Place;
                 course.DateTime = viewModel.GetDateTime();
                 course.CategoryId = viewModel.Category;
                 
-            };
+            
             
             _dbContext.SaveChanges();
             return RedirectToAction("Index", "Home");

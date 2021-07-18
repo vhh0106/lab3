@@ -13,6 +13,7 @@ namespace lab3.Models
         public DbSet<Category> Categories { get; set; }
         public DbSet<Attendance> Attendances { get; set; }
         public DbSet<Following> Followings { get; set; }
+        public object Course { get; internal set; }
 
         public ApplicationDbContext()
             : base("DefaultConnection", throwIfV1Schema: false)
@@ -29,7 +30,7 @@ namespace lab3.Models
                 .HasRequired(a => a.Course)
                 .WithMany()
                 .WillCascadeOnDelete(false);
-            base.OnModelCreating(modelBuilder);
+            
 
             modelBuilder.Entity<ApplicationUser>()
                 .HasMany(u => u.Followers)
@@ -40,6 +41,7 @@ namespace lab3.Models
                 .HasMany(u => u.Followees)
                 .WithRequired(f => f.Follower)
                 .WillCascadeOnDelete(false);
+            base.OnModelCreating(modelBuilder);
         }
     }
 }
